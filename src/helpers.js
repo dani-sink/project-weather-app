@@ -4,6 +4,10 @@ export const celsiusToFahrenheit = function (celsius) {
   return (celsius * 9) / 5 + 32;
 };
 
+export const fahrenheitToCelsius = function (fahrenheit) {
+  return ((fahrenheit - 32) * 5) / 9;
+};
+
 export const isValidCity = function (city) {
   // Check for empty input
   if (!city || city.trim() === "") {

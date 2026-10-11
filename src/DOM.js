@@ -142,6 +142,8 @@ export const ScreenController = function (controller) {
         await controller.loadNewCardData({ city, country });
         const newCard = controller.getCard();
         // Render it
+        weatherCardContainer.replaceChildren();
+        renderTempUnitToggleBtns();
         renderWeatherCard(newCard);
         // Reset load status
         controller.resetLoaded();
@@ -170,8 +172,49 @@ export const ScreenController = function (controller) {
     weatherCardContainer.appendChild(loadingText);
   };
 
+  const renderTempUnitToggleBtns = function () {
+    // Celsius and Fahrenheit toggle buttons
+    const tempUnitToggleContainer = document.createElement("div");
+    tempUnitToggleContainer.classList.add("temp-unit-toggle-container");
+
+    const tempUnitCelsiusBtn = document.createElement("button");
+    tempUnitCelsiusBtn.textContent = "°C";
+    tempUnitCelsiusBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      if (controller.getCurrentUnit() !== "Celsius") {
+        controller.convertToCelsiusUnit();
+        const modifiedCard = controller.getCard();
+        weatherCardContainer.replaceChildren();
+        renderTempUnitToggleBtns();
+        renderWeatherCard(modifiedCard);
+      }
+    });
+
+    const tempUnitFahrenheitBtn = document.createElement("button");
+    tempUnitFahrenheitBtn.textContent = "°F";
+    tempUnitFahrenheitBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      if (controller.getCurrentUnit() !== "Fahrenheit") {
+        controller.convertToFahrenheitUnit();
+        const modifiedCard = controller.getCard();
+        weatherCardContainer.replaceChildren();
+        renderTempUnitToggleBtns();
+        renderWeatherCard(modifiedCard);
+      }
+    });
+
+    tempUnitToggleContainer.appendChild(tempUnitCelsiusBtn);
+    tempUnitToggleContainer.appendChild(tempUnitFahrenheitBtn);
+
+    weatherCardContainer.appendChild(tempUnitToggleContainer);
+  };
+
   const renderWeatherCard = function (card) {
-    weatherCardContainer.replaceChildren();
+    // Weather card
+    const weatherCard = document.createElement("div");
+    weatherCard.classList.add("weather-card");
 
     const locationText = document.createElement("p");
     locationText.textContent = card.location;
@@ -222,12 +265,14 @@ export const ScreenController = function (controller) {
     bottomDataContainer.appendChild(windSpeedDataContainer);
     bottomDataContainer.appendChild(highLowDataContainer);
 
-    weatherCardContainer.appendChild(locationText);
-    weatherCardContainer.appendChild(localTimeText);
-    weatherCardContainer.appendChild(temperatureText);
-    weatherCardContainer.appendChild(conditionsText);
-    weatherCardContainer.appendChild(feelsLikeText);
-    weatherCardContainer.appendChild(bottomDataContainer);
+    weatherCard.appendChild(locationText);
+    weatherCard.appendChild(localTimeText);
+    weatherCard.appendChild(temperatureText);
+    weatherCard.appendChild(conditionsText);
+    weatherCard.appendChild(feelsLikeText);
+    weatherCard.appendChild(bottomDataContainer);
+
+    weatherCardContainer.appendChild(weatherCard);
   };
 
   function showInvalid(input, inputError, error) {

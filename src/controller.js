@@ -1,6 +1,10 @@
 import { requestLocationData } from "./api/visual_crossing_api.js";
 import { createCard } from "./card.js";
-import { celsiusToFahrenheit, parseAndFormatTime } from "./helpers.js";
+import {
+  celsiusToFahrenheit,
+  fahrenheitToCelsius,
+  parseAndFormatTime,
+} from "./helpers.js";
 
 export const ApiDataController = function () {
   let card = null;
@@ -26,22 +30,7 @@ export const ApiDataController = function () {
       let high = locationData.days[0].tempmax;
       let low = locationData.days[0].tempmin;
 
-      //   Convert to Fahrenheit if needed
-      if (tempUnit === "Fahrenheit") {
-        temp = celsiusToFahrenheit(temp);
-        feelsLike = celsiusToFahrenheit(feelsLike);
-        high = celsiusToFahrenheit(high);
-        low = celsiusToFahrenheit(low);
-      }
-
-      //   Round to nearest integer
-      temp = Math.round(temp);
-      feelsLike = Math.round(feelsLike);
-      high = Math.round(high);
-      low = Math.round(low);
-
-      // Create Card Object
-      card = createCard(
+      createNewCard(
         location,
         temp,
         feelsLike,
@@ -53,8 +42,6 @@ export const ApiDataController = function () {
         low,
         localTime,
       );
-      loaded = true;
-      errorMessage = "";
     } catch (err) {
       console.error("Error caught in loadNewCardData(): " + err);
       loaded = false;
@@ -63,8 +50,79 @@ export const ApiDataController = function () {
     }
   };
 
+  const createNewCard = function (
+    location,
+    temp,
+    feelsLike,
+    conditions,
+    icon,
+    humidity,
+    windspeed,
+    high,
+    low,
+    localTime,
+  ) {
+    //   Round to nearest integer
+    temp = Math.round(temp);
+    feelsLike = Math.round(feelsLike);
+    high = Math.round(high);
+    low = Math.round(low);
+
+    // Create Card Object
+    card = createCard(
+      location,
+      temp,
+      feelsLike,
+      conditions,
+      icon,
+      humidity,
+      windspeed,
+      high,
+      low,
+      localTime,
+    );
+    loaded = true;
+    errorMessage = "";
+  };
+
+  const toggleFahrenheitUnit = function () {
+    tempUnit = "Fahrenheit";
+  };
+
+  const convertTempsToFahrenheit = function () {
+    card.temp = Math.round(celsiusToFahrenheit(card.temp));
+    card.feelsLike = Math.round(celsiusToFahrenheit(card.feelsLike));
+    card.high = Math.round(celsiusToFahrenheit(card.high));
+    card.low = Math.round(celsiusToFahrenheit(card.low));
+  };
+
+  const convertToFahrenheitUnit = function () {
+    toggleFahrenheitUnit();
+    convertTempsToFahrenheit();
+  };
+
+  const toggleCelsiusUnit = function () {
+    tempUnit = "Celsius";
+  };
+
+  const convertTempsToCelsius = function () {
+    card.temp = Math.round(fahrenheitToCelsius(card.temp));
+    card.feelsLike = Math.round(fahrenheitToCelsius(card.feelsLike));
+    card.high = Math.round(fahrenheitToCelsius(card.high));
+    card.low = Math.round(fahrenheitToCelsius(card.low));
+  };
+
+  const convertToCelsiusUnit = function () {
+    toggleCelsiusUnit();
+    convertTempsToCelsius();
+  };
+
   const getCard = function () {
     return card;
+  };
+
+  const getCurrentUnit = function () {
+    return tempUnit;
   };
 
   const isLoaded = function () {
@@ -85,5 +143,8 @@ export const ApiDataController = function () {
     isLoaded,
     resetLoaded,
     getErrorMessage,
+    getCurrentUnit,
+    convertToCelsiusUnit,
+    convertToFahrenheitUnit,
   };
 };
