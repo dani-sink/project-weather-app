@@ -61,6 +61,13 @@ export const isValidCity = function (city) {
     };
   }
 
+  if (trimmedCity.length > 176) {
+    return {
+      isValid: false,
+      error: "City name must be longer than 176 characters.",
+    };
+  }
+
   // Regex checks if the structure matches letters, spaces, hyphens, periods, and apostrophes.
   const cityRegex = /^[a-zA-ZÀ-ÿ]+(?:(?:['\-.]?\s?|['\-.]+)[a-zA-ZÀ-ÿ]+)*$/;
 
@@ -129,4 +136,18 @@ export const parseAndFormatTime = function (timeString) {
 
 export const emojiFor = function (icon) {
   return WEATHER_EMOJI[icon] ?? "🌡️";
+};
+
+export const themeFor = function (icon) {
+  if (icon === "clear-day") return "clear-day";
+  if (icon === "clear-night") return "clear-night";
+  if (icon.startsWith("partly-cloudy") || icon === "cloudy") return "cloudy";
+  if (icon.includes("thunder")) return "thunder";
+  if (icon.includes("snow") || icon === "sleet" || icon === "hail")
+    return "snow";
+  if (icon.includes("rain") || icon.includes("showers")) return "rain";
+  if (icon === "fog" || icon === "wind") return "fog";
+
+  // Fallback
+  return "cloudy";
 };

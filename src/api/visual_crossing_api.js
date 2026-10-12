@@ -33,7 +33,7 @@ export async function requestLocationData({ city, country }) {
       if (response.status === 429) {
         throw new Error("Too many requests — try again later");
       }
-      throw new Error(`Request failed (${response.status})`);
+      throw new Error("Something went wrong. Please try again.");
     }
     const data = await response.json();
     return data;

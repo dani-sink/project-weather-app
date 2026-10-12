@@ -1,4 +1,4 @@
-import { emojiFor, isValidCity, isValidCountry } from "./helpers.js";
+import { emojiFor, isValidCity, isValidCountry, themeFor } from "./helpers.js";
 
 export const ScreenController = function (controller) {
   const searchBtn = document.querySelector("#search-btn");
@@ -265,6 +265,8 @@ export const ScreenController = function (controller) {
   };
 
   const renderWeatherCard = function (card) {
+    document.body.dataset.condition = themeFor(card.icon);
+
     // Weather card
     const weatherCard = document.createElement("div");
     weatherCard.classList.add("weather-card");
@@ -289,6 +291,7 @@ export const ScreenController = function (controller) {
     const topTextIcon = document.createElement("p");
     topTextIcon.classList.add("top-text-icon");
     topTextIcon.textContent = emojiFor(card.icon);
+    topTextIcon.ariaLabel = `Current condition is: ${card.icon}`;
 
     topTextLeftContainer.appendChild(locationText);
     topTextLeftContainer.appendChild(localTimeText);

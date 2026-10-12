@@ -12,10 +12,13 @@
   --btn-cancel: #e5484d;
   --btn-confirm: #30a46c;
   --error-text: #fecaca;
-  --clear: linear-gradient(160deg, #2b6cb0, #63b3ed 60%, #90cdf4);
+  --clear-day: linear-gradient(160deg, #2b6cb0, #63b3ed 60%, #90cdf4);
+  --clear-night: linear-gradient(160deg, #1a202c, #2d3748 60%, #4a5568);
   --cloudy: linear-gradient(160deg, #4a5568, #718096 60%, #a0aec0);
   --rain: linear-gradient(160deg, #2d3748, #4a5568 55%, #2b6cb0);
-  --night: linear-gradient(160deg, #1a202c, #2d3748 60%, #4a5568);
+  --snow: linear-gradient(160deg, #4a5568, #718096 60%, #cbd5e0);
+  --thunder: linear-gradient(160deg, #1d202c, #2d3748 60%, #434190);
+  --fog: linear-gradient(160deg, #718096, #a0aec0 60%, #cbd5e0);
 }
 
 *,
@@ -40,9 +43,32 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--clear);
+  background: var(--clear-day);
   color: var(--text-primary);
   font-family: "Inter", system-ui, sans-serif;
+  transition: background 0.6s ease;
+}
+
+body[data-condition="clear-day"] {
+  background: var(--clear-day);
+}
+body[data-condition="clear-night"] {
+  background: var(--clear-night);
+}
+body[data-condition="cloudy"] {
+  background: var(--cloudy);
+}
+body[data-condition="rain"] {
+  background: var(--rain);
+}
+body[data-condition="snow"] {
+  background: var(--snow);
+}
+body[data-condition="thunder"] {
+  background: var(--thunder);
+}
+body[data-condition="fog"] {
+  background: var(--fog);
 }
 
 svg {
@@ -66,7 +92,8 @@ h6 {
 }
 
 #header-txt {
-  font-size: 24px;
+  font-size: 32px;
+  font-weight: 600;
   margin-bottom: 1.2rem;
 }
 
@@ -174,7 +201,7 @@ h6 {
 }
 
 .temp-unit-toggle-container button {
-  background-color: var(--clear);
+  background-color: var(--clear-day);
   border: 1px solid var(--card-border);
   padding: 6px 12px;
   color: var(--text-secondary);
