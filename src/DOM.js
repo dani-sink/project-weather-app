@@ -7,6 +7,9 @@ export const ScreenController = function (controller) {
   );
 
   const searchForm = document.querySelector("#search-form-container");
+  const tempUnitToggleContainer = document.querySelector(
+    ".temp-unit-toggle-container",
+  );
 
   searchBtn.addEventListener("click", function () {
     // searchDialog.showModal();
@@ -143,6 +146,7 @@ export const ScreenController = function (controller) {
         const newCard = controller.getCard();
         // Render it
         weatherCardContainer.replaceChildren();
+        tempUnitToggleContainer.replaceChildren();
         renderTempUnitToggleBtns();
         renderWeatherCard(newCard);
         // Reset load status
@@ -166,49 +170,85 @@ export const ScreenController = function (controller) {
 
   const renderLoadingState = function () {
     weatherCardContainer.replaceChildren();
-    const loadingText = document.createElement("h1");
-    loadingText.textContent = "Loading...";
 
-    weatherCardContainer.appendChild(loadingText);
+    const loadingWeatherCard = document.createElement("div");
+    loadingWeatherCard.classList.add("loading-weather-card");
+
+    const spinnerContainer = document.createElement("div");
+    spinnerContainer.classList.add("spinner-container");
+
+    const spinnerEle = document.createElement("div");
+    spinnerEle.classList.add("loading-spinner");
+
+    spinnerContainer.appendChild(spinnerEle);
+
+    const middleBlocksContainer = document.createElement("div");
+    middleBlocksContainer.classList.add("middle-blocks-container");
+
+    const middleLongThinRectangle = document.createElement("div");
+    middleLongThinRectangle.classList.add("middle-long-thin-rectangle");
+    const middleMidRectangle = document.createElement("div");
+    middleMidRectangle.classList.add("middle-mid-rectangle");
+    const middleSmallRectangle = document.createElement("div");
+    middleSmallRectangle.classList.add("middle-small-rectangle");
+
+    middleBlocksContainer.appendChild(middleLongThinRectangle);
+    middleBlocksContainer.appendChild(middleMidRectangle);
+    middleBlocksContainer.appendChild(middleSmallRectangle);
+
+    const bottomBlocksContainer = document.createElement("div");
+    bottomBlocksContainer.classList.add("bottom-blocks-container");
+
+    for (let i = 0; i < 3; i++) {
+      const bottomBlock = document.createElement("div");
+      bottomBlock.classList.add("bottom-block");
+      bottomBlocksContainer.appendChild(bottomBlock);
+    }
+
+    loadingWeatherCard.appendChild(spinnerContainer);
+    loadingWeatherCard.appendChild(middleBlocksContainer);
+    loadingWeatherCard.appendChild(bottomBlocksContainer);
+
+    weatherCardContainer.appendChild(loadingWeatherCard);
   };
 
   const renderTempUnitToggleBtns = function () {
     // Celsius and Fahrenheit toggle buttons
-    const tempUnitToggleContainer = document.createElement("div");
-    tempUnitToggleContainer.classList.add("temp-unit-toggle-container");
-
     const tempUnitCelsiusBtn = document.createElement("button");
+    tempUnitCelsiusBtn.classList.add("celsius-btn");
+    tempUnitCelsiusBtn.classList.add("active");
     tempUnitCelsiusBtn.textContent = "°C";
     tempUnitCelsiusBtn.addEventListener("click", function (e) {
       e.preventDefault();
-
       if (controller.getCurrentUnit() !== "Celsius") {
+        tempUnitCelsiusBtn.classList.add("active");
+        tempUnitFahrenheitBtn.classList.remove("active");
         controller.convertToCelsiusUnit();
         const modifiedCard = controller.getCard();
         weatherCardContainer.replaceChildren();
-        renderTempUnitToggleBtns();
+        // renderTempUnitToggleBtns();
         renderWeatherCard(modifiedCard);
       }
     });
 
     const tempUnitFahrenheitBtn = document.createElement("button");
+    tempUnitFahrenheitBtn.classList.add("fahrenheit-btn");
     tempUnitFahrenheitBtn.textContent = "°F";
     tempUnitFahrenheitBtn.addEventListener("click", function (e) {
       e.preventDefault();
-
       if (controller.getCurrentUnit() !== "Fahrenheit") {
+        tempUnitFahrenheitBtn.classList.add("active");
+        tempUnitCelsiusBtn.classList.remove("active");
         controller.convertToFahrenheitUnit();
         const modifiedCard = controller.getCard();
         weatherCardContainer.replaceChildren();
-        renderTempUnitToggleBtns();
+        // renderTempUnitToggleBtns();
         renderWeatherCard(modifiedCard);
       }
     });
 
     tempUnitToggleContainer.appendChild(tempUnitCelsiusBtn);
     tempUnitToggleContainer.appendChild(tempUnitFahrenheitBtn);
-
-    weatherCardContainer.appendChild(tempUnitToggleContainer);
   };
 
   const renderWeatherCard = function (card) {
@@ -217,46 +257,57 @@ export const ScreenController = function (controller) {
     weatherCard.classList.add("weather-card");
 
     const locationText = document.createElement("p");
+    locationText.classList.add("location-txt");
     locationText.textContent = card.location;
 
     const localTimeText = document.createElement("p");
+    localTimeText.classList.add("local-time-txt");
     localTimeText.textContent = `${card.localTime} · local time`;
 
     const temperatureText = document.createElement("p");
+    temperatureText.classList.add("temp-txt");
     temperatureText.textContent = `${card.temp}°`;
 
     const conditionsText = document.createElement("p");
+    conditionsText.classList.add("conditions-txt");
     conditionsText.textContent = card.conditions;
 
     const feelsLikeText = document.createElement("p");
+    feelsLikeText.classList.add("feels-like-txt");
     feelsLikeText.textContent = `Feels like ${card.feelsLike}°`;
 
     const bottomDataContainer = document.createElement("div");
     bottomDataContainer.classList.add("bottom-data-container");
 
     const humidityDataContainer = document.createElement("div");
-    humidityDataContainer.classList.add("humidity-data-container");
+    humidityDataContainer.classList.add("data-container");
     const humidityDataTitle = document.createElement("p");
+    humidityDataTitle.classList.add("data-title");
     humidityDataTitle.textContent = "HUMIDITY";
     const humidityData = document.createElement("p");
+    humidityData.classList.add("data-text");
     humidityData.textContent = `${card.humidity} %`;
     humidityDataContainer.appendChild(humidityDataTitle);
     humidityDataContainer.appendChild(humidityData);
 
     const windSpeedDataContainer = document.createElement("div");
-    windSpeedDataContainer.classList.add("wind-speed-data-container");
+    windSpeedDataContainer.classList.add("data-container");
     const windSpeedTitle = document.createElement("p");
+    windSpeedTitle.classList.add("data-title");
     windSpeedTitle.textContent = "WIND";
     const windSpeedData = document.createElement("p");
+    windSpeedData.classList.add("data-text");
     windSpeedData.textContent = `${card.windspeed} km/h`;
     windSpeedDataContainer.appendChild(windSpeedTitle);
     windSpeedDataContainer.appendChild(windSpeedData);
 
     const highLowDataContainer = document.createElement("div");
-    highLowDataContainer.classList.add("high-low-data-container");
+    highLowDataContainer.classList.add("data-container");
     const highLowDataTitle = document.createElement("p");
+    highLowDataTitle.classList.add("data-title");
     highLowDataTitle.textContent = "HI / LO";
     const highLowData = document.createElement("p");
+    highLowData.classList.add("data-text");
     highLowData.textContent = `${card.high}° / ${card.low}°`;
     highLowDataContainer.appendChild(highLowDataTitle);
     highLowDataContainer.appendChild(highLowData);
