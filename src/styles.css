@@ -9,6 +9,8 @@
   --spinner-speed-color: rgba(255, 255, 255, 0.605);
   --rectangle-block-color: rgba(255, 255, 255, 0.24);
   --card-border: rgba(255, 255, 255, 0.22);
+  --btn-cancel: #e5484d;
+  --btn-confirm: #30a46c;
   --error-text: #fecaca;
   --clear: linear-gradient(160deg, #2b6cb0, #63b3ed 60%, #90cdf4);
   --cloudy: linear-gradient(160deg, #4a5568, #718096 60%, #a0aec0);
@@ -65,6 +67,110 @@ h6 {
 
 #header-txt {
   font-size: 24px;
+  margin-bottom: 1.2rem;
+}
+
+#search-btn,
+.search-cancel-btn,
+.search-confirm-btn {
+  border: 2px solid var(--card-border);
+  padding: 6px 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+#search-btn {
+  background-color: var(--card-surface-one);
+  margin-bottom: 1.2rem;
+}
+
+#search-btn:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+#search-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+#search-form-container input {
+  border: transparent;
+  padding: 8px 12px;
+  background-color: #fbfdff;
+  width: 250px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-top: 3px;
+}
+
+#search-form-container #city:focus,
+#search-form-container #country:focus {
+  outline: none;
+  border: 2px solid #01366e;
+}
+
+.search-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  width: 250px;
+  background-color: #f8d7da;
+  color: #842029;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.active {
+  border: 1px solid #f5c6cb;
+  padding: 8px 12px;
+}
+
+.search-form-btns-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#search-btn:focus {
+  background-color: rgba(255, 255, 255, 0.32);
+}
+
+.search-cancel-btn {
+  background-color: var(--btn-cancel);
+}
+
+.search-cancel-btn:hover {
+  background-color: #dc3e42;
+}
+
+.search-cancel-btn:focus {
+  background-color: #6e1416;
+}
+
+.search-confirm-btn {
+  background-color: var(--btn-confirm);
+}
+
+.search-confirm-btn:hover {
+  background-color: #2b9361;
+}
+
+.search-confirm-btn:focus {
+  background-color: #0f4227;
+}
+
+.temp-unit-toggle-container {
+  width: 50vw;
+  max-width: 400px;
+  margin-bottom: 1rem;
 }
 
 .temp-unit-toggle-container button {
@@ -79,6 +185,7 @@ h6 {
 }
 
 .temp-unit-toggle-container button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .celsius-btn {
@@ -98,7 +205,8 @@ h6 {
 }
 
 .weather-card,
-.loading-weather-card {
+.loading-weather-card,
+.error-weather-card {
   background: var(--card-surface-one);
   backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
@@ -106,6 +214,14 @@ h6 {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   max-width: 465px;
   padding: 28px;
+}
+
+.top-text-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  justify-items: center;
+  align-items: center;
+  column-gap: 1rem;
 }
 
 .location-txt {
@@ -117,6 +233,10 @@ h6 {
   font-size: 13px;
   color: var(--text-secondary);
   font-weight: 400;
+}
+
+.top-text-icon {
+  font-size: 72px;
 }
 
 .temp-txt {
@@ -253,4 +373,25 @@ h6 {
   100% {
     opacity: 0.6;
   }
+}
+
+.error-weather-card {
+  width: min(50vw, 465px);
+  height: min(25vh, 240px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-weather-icon {
+  font-size: 42px;
+}
+
+.error-weather-msg {
+  width: 80%;
+  font-size: 18px;
+  color: var(--error-text);
+  text-align: center;
 }

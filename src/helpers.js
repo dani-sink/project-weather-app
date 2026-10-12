@@ -1,5 +1,39 @@
 import { format, parse } from "date-fns";
 
+const WEATHER_EMOJI = {
+  // ☀️ Clear & Cloudy
+  "clear-day": "☀️",
+  "clear-night": "🌙",
+  "partly-cloudy-day": "⛅",
+  "partly-cloudy-night": "☁️",
+  cloudy: "☁️",
+
+  // 🌧️ Rain & Showers
+  rain: "🌧️",
+  "showers-day": "🌦️",
+  "showers-night": "🌧️",
+
+  // ❄️ Snow & Winter Precipitation
+  snow: "❄️",
+  "snow-showers-day": "🌨️",
+  "snow-showers-night": "🌨️",
+  sleet: "🌨️",
+  hail: "🌨️",
+  "rain-snow-showers-day": "🌨️",
+  "rain-snow-showers-night": "🌨️",
+  "rain-snow": "🌨️",
+
+  // ⛈️ Thunderstorms
+  thunder: "🌩️",
+  "thunder-rain": "⛈️",
+  "thunder-showers-day": "⛈️",
+  "thunder-showers-night": "⛈️",
+
+  // 🌫️ Atmospheric
+  fog: "🌫️",
+  wind: "💨",
+};
+
 export const celsiusToFahrenheit = function (celsius) {
   return (celsius * 9) / 5 + 32;
 };
@@ -91,4 +125,8 @@ export const parseAndFormatTime = function (timeString) {
   // Format the date object into 12-hour format with AM/PM ('hh:mm a')
   const formattedTime = format(parsedDate, "EEEE hh:mm a");
   return formattedTime;
+};
+
+export const emojiFor = function (icon) {
+  return WEATHER_EMOJI[icon] ?? "🌡️";
 };

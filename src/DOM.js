@@ -1,4 +1,4 @@
-import { isValidCity, isValidCountry } from "./helpers.js";
+import { emojiFor, isValidCity, isValidCountry } from "./helpers.js";
 
 export const ScreenController = function (controller) {
   const searchBtn = document.querySelector("#search-btn");
@@ -16,19 +16,12 @@ export const ScreenController = function (controller) {
     renderSearchForm();
   });
 
-  const renderErrorState = function (errorMsg) {
-    weatherCardContainer.replaceChildren();
-    const errorText = document.createElement("h1");
-    errorText.textContent = errorMsg;
-
-    weatherCardContainer.appendChild(errorText);
-  };
-
   const clearSearchForm = function () {
     searchForm.replaceChildren();
   };
 
   const renderSearchForm = function () {
+    clearSearchForm();
     const loopArr = [
       ["City", "city"],
       ["Country", "country"],
@@ -37,7 +30,7 @@ export const ScreenController = function (controller) {
     // Create both city and country inputs dynamically
     loopArr.forEach((ele) => {
       const searchInputContainer = document.createElement("div");
-      searchInputContainer.classList.add("search-input");
+      searchInputContainer.classList.add("search-input-container");
 
       const searchInputLabel = document.createElement("label");
       searchInputLabel.htmlFor = ele[1];
@@ -168,6 +161,26 @@ export const ScreenController = function (controller) {
     searchForm.appendChild(searchFormBtnsContainer);
   };
 
+  const renderErrorState = function (errorMsg) {
+    weatherCardContainer.replaceChildren();
+
+    const errorWeatherCard = document.createElement("div");
+    errorWeatherCard.classList.add("error-weather-card");
+
+    const errorWeatherIcon = document.createElement("p");
+    errorWeatherIcon.classList.add("error-weather-icon");
+    errorWeatherIcon.textContent = emojiFor("rain");
+
+    const errorWeatherMsg = document.createElement("p");
+    errorWeatherMsg.classList.add("error-weather-msg");
+    errorWeatherMsg.textContent = errorMsg;
+
+    errorWeatherCard.appendChild(errorWeatherIcon);
+    errorWeatherCard.appendChild(errorWeatherMsg);
+
+    weatherCardContainer.appendChild(errorWeatherCard);
+  };
+
   const renderLoadingState = function () {
     weatherCardContainer.replaceChildren();
 
@@ -256,6 +269,12 @@ export const ScreenController = function (controller) {
     const weatherCard = document.createElement("div");
     weatherCard.classList.add("weather-card");
 
+    const topTextContainer = document.createElement("div");
+    topTextContainer.classList.add("top-text-container");
+
+    const topTextLeftContainer = document.createElement("div");
+    topTextLeftContainer.classList.add("top-text-left-container");
+
     const locationText = document.createElement("p");
     locationText.classList.add("location-txt");
     locationText.textContent = card.location;
@@ -263,6 +282,21 @@ export const ScreenController = function (controller) {
     const localTimeText = document.createElement("p");
     localTimeText.classList.add("local-time-txt");
     localTimeText.textContent = `${card.localTime} · local time`;
+
+    const topTextRightContainer = document.createElement("div");
+    topTextRightContainer.classList.add("top-text-right-container");
+
+    const topTextIcon = document.createElement("p");
+    topTextIcon.classList.add("top-text-icon");
+    topTextIcon.textContent = emojiFor(card.icon);
+
+    topTextLeftContainer.appendChild(locationText);
+    topTextLeftContainer.appendChild(localTimeText);
+
+    topTextRightContainer.appendChild(topTextIcon);
+
+    topTextContainer.appendChild(topTextLeftContainer);
+    topTextContainer.appendChild(topTextRightContainer);
 
     const temperatureText = document.createElement("p");
     temperatureText.classList.add("temp-txt");
@@ -316,8 +350,7 @@ export const ScreenController = function (controller) {
     bottomDataContainer.appendChild(windSpeedDataContainer);
     bottomDataContainer.appendChild(highLowDataContainer);
 
-    weatherCard.appendChild(locationText);
-    weatherCard.appendChild(localTimeText);
+    weatherCard.appendChild(topTextContainer);
     weatherCard.appendChild(temperatureText);
     weatherCard.appendChild(conditionsText);
     weatherCard.appendChild(feelsLikeText);
